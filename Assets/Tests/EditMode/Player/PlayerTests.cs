@@ -1,6 +1,7 @@
 // Assets/Tests/EditMode/Player/PlayerTests.cs
 using NUnit.Framework;
 using SpaceDefender.Core;
+using System;
 
 [TestFixture]
 public class PlayerTests
@@ -16,67 +17,56 @@ public class PlayerTests
     [Test]
     public void TakeDamage_Normal_ReducesHealth()
     {
-        int damage = 20;
-        _player.TakeDamage(damage);
+        _player.TakeDamage(20);
         Assert.AreEqual(80, _player.Health);
     }
 
     [Test]
     public void TakeDamage_WhenDamageGreaterHealth_ResetHealth()
     {
-        int damage = 120;
-        _player.TakeDamage(damage);
+        _player.TakeDamage(120);
         Assert.AreEqual(0, _player.Health);
     }
 
     [Test]
     public void TakeDamage_NoDamage_Unchanged()
     {
-        int damage = 0;
-        _player.TakeDamage(damage);
+        _player.TakeDamage(0);
         Assert.AreEqual(100, _player.Health);
     }
 
     [Test]
     public void TakeDamage_NegateDamage_Exception()
     {
-        int damage = -1;
-        _player.TakeDamage(damage);
-        Assert.AreEqual(100, _player.Health);
+        Assert.Throws<ArgumentOutOfRangeException>(() => _player.TakeDamage(-10));
     }
 
     [Test]
     public void Heal_RegularTreatment_ImproveHealth()
     {
-        int treatment = 20;
-        int damage = 80;
-        _player.TakeDamage(damage);
-        _player.Heal(treatment);
+        _player.TakeDamage(80);
+        _player.Heal(20);
         Assert.AreEqual(40, _player.Health);
     }
 
     [Test]
     public void Health_TreatmentExceedsMax_HealthMax()
     {
-        int treatment = 20;
-        int damage = 10;
-        _player.TakeDamage(damage);
-        _player.Heal(treatment);
+        _player.Heal(50);
         Assert.AreEqual(100, _player.Health);
     }
 
     [Test]
     public void IsAlive_WhenHealthAboveZero_ReturnsTrue()
     {
-        Assert.AreEqual(true, _player.IsAlive);
+        Assert.IsTrue(_player.IsAlive);
     }
 
     [Test]
     public void IsAlive_WhenHealthEqualZero_ReturnsFalse()
     {
-        int damage = 120;
-        _player.TakeDamage(damage);
-        Assert.AreEqual(false, _player.IsAlive);
+        _player.TakeDamage(100);
+        Assert.IsFalse(_player.IsAlive);
     }
 
     [Test]
@@ -92,22 +82,33 @@ public class PlayerTests
         _player.LoseLife();
         _player.LoseLife();
         _player.LoseLife();
-        Assert.AreEqual(false, _player.IsAlive);
+        Assert.IsFalse(_player.IsAlive);
     }
 
     [Test]
     public void AddScore_PositivePoints_ImproveScore()
     {
-        int score = 100;
-        _player.AddScore(score);
+        _player.AddScore(100);
         Assert.AreEqual(100, _player.Score);
     }
 
     [Test]
     public void AddScore_NegatePoints_UnchangeOrException()
     {
-        int score = -100;
-        _player.AddScore(score);
-        Assert.AreEqual(0, _player.Score);
+        Assert.Throws<ArgumentOutOfRangeException>(() => _player.AddScore(-50));
+    }
+
+    // Test Bonus
+
+    [Test]
+    public void IsAlive_WhenHealthPositiveButLivesZero_ReturnsFalse()
+    {
+        _player.LoseLife();
+        _player.LoseLife();
+        _player.LoseLife();
+
+        _player.Heal(50);
+
+        Assert.IsFalse(_player.IsAlive);
     }
 }

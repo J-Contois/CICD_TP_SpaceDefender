@@ -1,18 +1,22 @@
-name: Acquire Activation File
+name: Get Unity Activation File
+
 on:
   workflow_dispatch:
 
 jobs:
   activation:
-    name: Request manual activation file
+    name: Request Activation File
     runs-on: ubuntu-latest
+
     steps:
-      - name: Request manual activation file
+      - name: Request Unity Activation File
         uses: game-ci/unity-request-activation-file@v2
         id: getManualLicenseFile
+        with:
+          unityVersion: 6000.1.17f1
 
-      - name: Expose as artifact
+      - name: Upload Activation File
         uses: actions/upload-artifact@v4
         with:
-          name: Unity_v*.alf
+          name: Unity_v${{ steps.getManualLicenseFile.outputs.unityVersion }}.alf
           path: ${{ steps.getManualLicenseFile.outputs.filePath }}

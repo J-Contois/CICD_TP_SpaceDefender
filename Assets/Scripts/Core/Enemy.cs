@@ -1,7 +1,6 @@
 // Assets/Scripts/Core/Enemy.cs
 namespace SpaceDefender.Core
 {
-
     public enum EnemyType
     {
         Basic,
@@ -12,9 +11,14 @@ namespace SpaceDefender.Core
     public class Enemy
     {
         public int Health { get; private set; } = 100;
-        public int PointValue { get; private set; } = 0;
         public EnemyType Type { get; private set; } = EnemyType.Basic;
         public bool IsAlive => Health > 0;
+
+        public Enemy(EnemyType type, int initialHealth = 100)
+        {
+            Type = type;
+            Health = initialHealth;
+        }
 
         public void TakeDamage(int amount)
         {
@@ -33,19 +37,16 @@ namespace SpaceDefender.Core
 
         public int GetReward()
         {
-            if (!IsAlive) return 0;
+            if (IsAlive) return 0;
 
             switch (Type)
             {
                 case EnemyType.Basic:
-                    PointValue = 10;
-                    return PointValue;
+                    return 10;
                 case EnemyType.Fast:
-                    PointValue = 20;
-                    return PointValue;
+                    return 20;
                 case EnemyType.Tank:
-                    PointValue = 30;
-                    return PointValue;
+                    return 30;
                 default:
                     return 0;
             }
