@@ -14,7 +14,6 @@ namespace SpaceDefender.Core
 
         public void TakeDamage(int amount)
         {
-
             if (amount < 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Damage cannot be negative.");
 
@@ -37,8 +36,8 @@ namespace SpaceDefender.Core
                 throw new ArgumentOutOfRangeException(nameof(points), "Points cannot be negative.");
 
             Score += points;
-
         }
+
         public void LoseLife()
         {
             if (Lives > 0)

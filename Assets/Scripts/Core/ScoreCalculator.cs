@@ -1,4 +1,4 @@
-
+// Assets/Scripts/Core/ScoreCalculator.cs
 using System;
 
 namespace SpaceDefender.Core
